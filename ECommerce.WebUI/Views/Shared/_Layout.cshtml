@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ECommerce.WebUI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 </head>
 <body>
     <header>
@@ -50,7 +52,7 @@
             </div>
             <main role="main" class="pb-3 col-md-10">
                 @if(TempData["message"]!=null){
-                    <div class="alert alert-info" role="alert">@TempData["message"]</div>
+                    <div class="alert alert-info animate__animated animate__bounceInLeft" role="alert">@TempData["message"]</div>
                 }
                 @RenderBody()
             </main>
