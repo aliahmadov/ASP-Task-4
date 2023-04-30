@@ -5,6 +5,7 @@ using App.Business.Concrete;
 using App.DataAccess.Abstract;
 using App.DataAccess.Concrete.EFEntityFramework;
 using App.Entities.Models;
+using ECommerce.WebUI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<ICartSessionService, CartSessionService>();
+builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICategoryDal, EFCategoryDal>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductDal, EFProductDal>();
