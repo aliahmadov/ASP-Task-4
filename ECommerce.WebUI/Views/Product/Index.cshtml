@@ -2,6 +2,14 @@
 
 <p>
     <a href="/product/add" class="btn btn-outline-primary">Create New</a>
+    @if (Model.CurrentFilterState)
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=true" class="btn btn-outline-primary">A-Z</a>
+    }
+    else
+    {
+        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=false" class="btn btn-outline-primary">Z-A</a>
+    }
 </p>
 <table class="table">
     <thead>
@@ -13,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model.Products)
+        @foreach (var item in Model.Products)
         {
             <tr>
                 <td>
@@ -27,19 +35,16 @@
                 </td>
                 <td>
                     <a class="btn btn-xs btn-success" asp-controller="Cart"
-                    asp-action="AddToCart" asp-route-productId="@item.ProductId"
-                    >Add To Cart</a>
+                   asp-action="AddToCart" asp-route-productId="@item.ProductId">Add To Cart</a>
                 </td>
             </tr>
         }
-</tbody>
+    </tbody>
 </table>
 
-<product-list-pager
-current-category="@Model.CurrentCategory"
-current-page="@Model.CurrentPage"
-page-count="@Model.PageCount"
-page-size="@Model.PageSize"
->
+<product-list-pager current-category="@Model.CurrentCategory"
+                    current-page="@Model.CurrentPage"
+                    page-count="@Model.PageCount"
+                    page-size="@Model.PageSize">
 
 </product-list-pager>

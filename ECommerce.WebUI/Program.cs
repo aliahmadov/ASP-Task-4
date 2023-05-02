@@ -5,7 +5,9 @@ using App.Business.Concrete;
 using App.DataAccess.Abstract;
 using App.DataAccess.Concrete.EFEntityFramework;
 using App.Entities.Models;
+using ECommerce.WebUI.Entities;
 using ECommerce.WebUI.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,8 +27,17 @@ builder.Services.AddScoped<IProductDal, EFProductDal>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 var conn = builder.Configuration.GetConnectionString("myconn");
-builder.Services.AddDbContext<NorthwindContext>(
-    options => options.UseSqlServer(conn));
+//builder.Services.AddDbContext<NorthwindContext>(
+//    options => options.UseSqlServer(conn));
+
+builder.Services.AddDbContext<CustomIdentityDbContext>(opt =>
+{
+    opt.UseSqlServer(conn);
+});
+
+builder.Services.AddIdentity<CustomIdentityUser, CustomIdentityRole>()
+    .AddEntityFrameworkStores<CustomIdentityDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -43,8 +54,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
-
 
 
 app.UseSession();

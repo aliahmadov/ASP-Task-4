@@ -1,6 +1,7 @@
 ﻿using App.Business.Abstract;
 using App.Entities.Models;
 using ECommerce.WebUI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.WebUI.Controllers
@@ -15,13 +16,17 @@ namespace ECommerce.WebUI.Controllers
             _productService = productService;
             _categoryService = categoryService;
         }
-
-        public IActionResult Index(int page = 1, int category=0)
+        public static bool FilterState { get; set; } = false;
+        [Authorize(Roles = "Editor")]
+        public IActionResult Index(int page = 1, int category=0,bool filterAZ=false)
         {
             int pageSize = 10;
             var products = _productService.GetAllByCategory(category);
+            products=_productService.GetAllByFilterAZ(products, filterAZ);
+            FilterState = !FilterState;
             var model = new ProductListViewModel
             {
+                CurrentFilterState= FilterState,
                 Products = products.Skip((page-1)*pageSize).Take(pageSize).ToList(),
                 CurrentCategory = category,
                 PageCount=(int)Math.Ceiling(products.Count/(double)pageSize),
@@ -30,6 +35,7 @@ namespace ECommerce.WebUI.Controllers
             };
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Add()
         {
@@ -38,11 +44,16 @@ namespace ECommerce.WebUI.Controllers
             model.Categories=_categoryService.GetAll();
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Add(ProductAddViewModel model)
         {
             _productService.Add(model.Product);
             return RedirectToAction("index");
         }
+
+   
+
+
     }
 }

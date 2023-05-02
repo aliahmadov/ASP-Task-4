@@ -39,6 +39,18 @@ namespace App.Business.Concrete
             return _productDal.GetList(p=>p.CategoryId==categoryId || categoryId==0);    
         }
 
+        public List<Product> GetAllByFilterAZ(List<Product> list, bool az = false)
+        {
+            if (az)
+                return list.OrderBy(x => x.ProductName).ToList();
+            return list.OrderByDescending(x => x.ProductName).ToList();
+        }
+
+        public List<Product> GetAllByFilterHigherToLower(bool higher = false)
+        {
+            throw new NotImplementedException();
+        }
+
         public Product GetById(int id)
         {
             return _productDal.Get(p => p.ProductId == id);
