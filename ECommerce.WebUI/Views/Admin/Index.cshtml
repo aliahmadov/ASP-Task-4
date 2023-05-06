@@ -21,6 +21,8 @@
             <th>UnitPrice</th>
             <th>UnitsInStock</th>
             <th></th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -37,10 +39,37 @@
                     @item.UnitsInStock
                 </td>
                 <td>
-                    <a class="btn btn-xs btn-success" asp-controller="Cart"
-                   asp-action="AddToCart" asp-route-productId="@item.ProductId">Add To Cart</a>
+                    <a class="btn btn-xs btn-success" asp-controller="Admin"
+                   asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                </td>
+                <td id="@item.ProductId">
+                    <a class="btn btn-xs btn-success"
+                   onclick="GetData(@item.ProductId);">Open</a>
+                </td>
+                <td>
+                    <a class="btn btn-xs btn-success" asp-controller="Admin"
+                   asp-action="UpdateProduct" asp-route-id="@item.ProductId">Submit Update</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<script>
+
+        async function GetData(id){
+      //  alert(id);
+        event.stopPropagation();
+    let td=document.getElementById(id);
+    td.parentElement.style="background-color:springgreen";
+        await GetProduct(id);
+    }
+
+    async function GetProduct(id){
+        const response = await fetch(`Admin/Product?id=${id}`);
+        const jsonData = await response.json();
+        console.log(jsonData);
+        alert(jsonData.productName);
+    }
+</script>
+

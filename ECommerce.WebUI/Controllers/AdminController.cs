@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.WebUI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+   
     public class AdminController : Controller
     {
         private IProductService _productService;
@@ -19,6 +19,8 @@ namespace ECommerce.WebUI.Controllers
             _categoryService = categoryService;
         }
         public static bool FilterState { get; set; } = false;
+        //[Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult Index(int page = 1, int category = 0, bool filterAZ = false)
         {
             int pageSize = 10;
@@ -27,6 +29,7 @@ namespace ECommerce.WebUI.Controllers
             FilterState = !FilterState;
             var model = new ProductListViewModel
             {
+                UpdatedProduct=new Product(),
                 CurrentFilterState = FilterState,
                 Products = products.ToList(),
                 CurrentCategory = category,
@@ -46,6 +49,8 @@ namespace ECommerce.WebUI.Controllers
             return View(model);
         }
 
+       
+
         [HttpPost]
         public IActionResult Add(ProductAddViewModel model)
         {
@@ -53,5 +58,34 @@ namespace ECommerce.WebUI.Controllers
             return RedirectToAction("index");
         }
 
+        public JsonResult Product(int id)
+        {
+            var item = _productService.GetById(id);
+            return Json(item);
+        }
+
+
+        [HttpPost]
+        public string UpdateProduct(Product product)
+        {
+            _productService.Update(product);
+            return "Updated";
+        }
+
+        [HttpGet("ProductDelete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+            _productService.Delete(id);
+            TempData.Add("message", String.Format("Your product, {0} was added successfully to cart!",id));
+            }
+            catch (Exception ex)
+            {
+                TempData.Add("message","Not Found");
+
+            }
+            return RedirectToAction("index");
+        }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using App.Core.Abstraction;
+using System;
 using System.Collections.Generic;
 
 namespace App.Entities.Models
 {
-    public partial class Order
+    public partial class Order:IEntity
     {
         public Order()
         {
