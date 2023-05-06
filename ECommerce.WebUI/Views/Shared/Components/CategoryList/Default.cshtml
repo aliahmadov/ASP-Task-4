@@ -7,6 +7,11 @@
         @if(item.CategoryId==Model.CurrentCategory){
             css += " active";
         }
+        @if(Model.IsClient){
         <a style="cursor:pointer;" href="/product/index?category=@item.CategoryId" class="@css">@item.CategoryName</a>
+        }
+        else{
+            <a style="cursor:pointer;" href="/admin/index?category=@item.CategoryId" class="@css">@item.CategoryName</a>
+        }
     }
 </section>

@@ -122,7 +122,7 @@ namespace ECommerce.WebUI.Controllers
                 var result=_signInManager.PasswordSignInAsync(model.UserName,model.Password,model.RememberMe,false).Result;
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index","Product");//should change to Admin
+                    return RedirectToAction("Index","Admin");//should change to Admin
                 }
                 ModelState.AddModelError("", "Invalid Login");
             }

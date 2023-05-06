@@ -17,7 +17,6 @@ namespace ECommerce.WebUI.Controllers
             _categoryService = categoryService;
         }
         public static bool FilterState { get; set; } = false;
-        [Authorize(Roles = "Editor")]
         public IActionResult Index(int page = 1, int category=0,bool filterAZ=false)
         {
             int pageSize = 10;
@@ -36,22 +35,7 @@ namespace ECommerce.WebUI.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public IActionResult Add()
-        {
-            var model = new ProductAddViewModel();
-            model.Product = new Product();
-            model.Categories=_categoryService.GetAll();
-            return View(model);
-        }
-
-        [HttpPost]
-        public IActionResult Add(ProductAddViewModel model)
-        {
-            _productService.Add(model.Product);
-            return RedirectToAction("index");
-        }
-
+        
    
 
 

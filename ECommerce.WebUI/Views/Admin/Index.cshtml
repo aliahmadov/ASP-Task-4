@@ -1,13 +1,17 @@
 ﻿@model ProductListViewModel
+@{
+    Layout = "_AdminLayout";
+}
 
 <p>
+    <a href="/admin/add" class="btn btn-outline-primary">Create New</a>
     @if (Model.CurrentFilterState)
     {
-        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=true" class="btn btn-outline-primary">A-Z</a>
+        <a href="/admin/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=true" class="btn btn-outline-primary">A-Z</a>
     }
     else
     {
-        <a href="/product/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=false" class="btn btn-outline-primary">Z-A</a>
+        <a href="/admin/index?page=@Model.CurrentPage&category=@Model.CurrentCategory&filterAZ=false" class="btn btn-outline-primary">Z-A</a>
     }
 </p>
 <table class="table">
@@ -40,10 +44,3 @@
         }
     </tbody>
 </table>
-
-<product-list-pager current-category="@Model.CurrentCategory"
-                    current-page="@Model.CurrentPage"
-                    page-count="@Model.PageCount"
-                    page-size="@Model.PageSize">
-
-</product-list-pager>
