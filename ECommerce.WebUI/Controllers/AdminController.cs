@@ -4,10 +4,11 @@ using ECommerce.WebUI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ECommerce.WebUI.Controllers
 {
-   
+
     public class AdminController : Controller
     {
         private IProductService _productService;
@@ -29,7 +30,7 @@ namespace ECommerce.WebUI.Controllers
             FilterState = !FilterState;
             var model = new ProductListViewModel
             {
-                UpdatedProduct=new Product(),
+                UpdatedProduct = new Product(),
                 CurrentFilterState = FilterState,
                 Products = products.ToList(),
                 CurrentCategory = category,
@@ -49,7 +50,7 @@ namespace ECommerce.WebUI.Controllers
             return View(model);
         }
 
-       
+
 
         [HttpPost]
         public IActionResult Add(ProductAddViewModel model)
@@ -65,11 +66,15 @@ namespace ECommerce.WebUI.Controllers
         }
 
 
-        [HttpPost]
-        public string UpdateProduct(Product product)
+
+        public IActionResult Update(string id)
         {
-            _productService.Update(product);
-            return "Updated";
+            var product = JsonConvert.DeserializeObject<Product>(id);
+            if (product != null)
+			{
+                _productService.Update(product);
+            }
+            return RedirectToAction("index");
         }
 
         [HttpGet("ProductDelete/{id}")]
@@ -77,12 +82,12 @@ namespace ECommerce.WebUI.Controllers
         {
             try
             {
-            _productService.Delete(id);
-            TempData.Add("message", String.Format("Your product, {0} was added successfully to cart!",id));
+                _productService.Delete(id);
+                TempData.Add("message", String.Format("Your product, {0} was deleted successfully!", id));
             }
             catch (Exception ex)
             {
-                TempData.Add("message","Not Found");
+                TempData.Add("message", "Not Found");
 
             }
             return RedirectToAction("index");
